@@ -3,6 +3,7 @@ import { FcGoogle } from "react-icons/fc";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
+import { toast } from "sonner";
 import { PageContainer } from "~/components/layout/PageContainer";
 import { SectionContainer } from "~/components/layout/SectionContainer";
 import { Button } from "~/components/ui/button";
@@ -13,6 +14,7 @@ import {
   CardHeader,
 } from "~/components/ui/card";
 import { Form } from "~/components/ui/form";
+import { api } from "~/utils/api";
 import RegisterFormInner from "../components/RegisterFormInner";
 import { registerFormShcema, type RegisterFormSchema } from "../forms/register";
 
@@ -21,8 +23,20 @@ const RegisterPage = () => {
     resolver: zodResolver(registerFormShcema),
   });
 
+  const { mutate: registerUser, isPending: registerUserIsPending } =
+    api.auth.register.useMutation({
+      onSuccess: () => {
+        toast("Akun kamu berhasil dibuat");
+        form.setValue("email", "");
+        form.setValue("password", "");
+      },
+      onError: () => {
+        toast.error("Ada kesalahan terjadi, coba beberapa saat lagi");
+      },
+    });
+
   const handleRegisterSubmit = (values: RegisterFormSchema) => {
-    alert("Haloo");
+    registerUser(values);
   };
 
   return (
@@ -38,7 +52,10 @@ const RegisterPage = () => {
           </CardHeader>
           <CardContent>
             <Form {...form}>
-              <RegisterFormInner onRegisterSubmit={handleRegisterSubmit} />
+              <RegisterFormInner
+                isLoading={registerUserIsPending}
+                onRegisterSubmit={handleRegisterSubmit}
+              />
             </Form>
 
             {/* CONTINUE WITH GOOGLE */}

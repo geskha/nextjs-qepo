@@ -1,9 +1,10 @@
 import { GeistSans } from "geist/font/sans";
 import { type AppType } from "next/app";
-import {ThemeProvider} from "~/components/theme-provider";
+import { ThemeProvider } from "~/components/theme-provider";
 
 import { api } from "~/utils/api";
 
+import { Toaster } from "~/components/ui/sonner";
 import "~/styles/globals.css";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
@@ -16,6 +17,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
     >
       <div className={GeistSans.className}>
         <Component {...pageProps} />
+        <Toaster />
       </div>
     </ThemeProvider>
   );

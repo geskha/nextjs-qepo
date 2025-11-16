@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { useFormContext } from "react-hook-form";
 import {
   FormControl,
   FormDescription,
@@ -7,16 +8,16 @@ import {
   FormLabel,
   FormMessage,
 } from "~/components/ui/form";
+import { Button } from "../../../components/ui/button";
+import { Checkbox } from "../../../components/ui/checkbox";
 import { Input } from "../../../components/ui/input";
 import { Label } from "../../../components/ui/label";
-import { Checkbox } from "../../../components/ui/checkbox";
-import { Button } from "../../../components/ui/button";
-import { useFormContext } from "react-hook-form";
 import { RegisterFormSchema } from "../forms/register";
 
 type RegisterFormInnerProps = {
-    onRegisterSubmit: (values: RegisterFormSchema) => void
-}
+  onRegisterSubmit: (values: RegisterFormSchema) => void;
+  isLoading?: boolean;
+};
 
 export const RegisterFormInner = (props: RegisterFormInnerProps) => {
   const form = useFormContext<RegisterFormSchema>();
@@ -66,7 +67,7 @@ export const RegisterFormInner = (props: RegisterFormInnerProps) => {
         Show Password
       </Label>
 
-      <Button className="mt-4 w-full" size="lg">
+      <Button disabled={props.isLoading} className="mt-4 w-full" size="lg">
         Buat akun
       </Button>
     </form>
