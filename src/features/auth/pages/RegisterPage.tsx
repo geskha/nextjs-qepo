@@ -4,6 +4,7 @@ import { FcGoogle } from "react-icons/fc";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { toast } from "sonner";
+import { GuestRoute } from "~/components/layout/GuestRoute";
 import { PageContainer } from "~/components/layout/PageContainer";
 import { SectionContainer } from "~/components/layout/SectionContainer";
 import { Button } from "~/components/ui/button";
@@ -40,52 +41,54 @@ const RegisterPage = () => {
   };
 
   return (
-    <PageContainer>
-      <SectionContainer
-        padded
-        className="flex min-h-[calc(100vh-144px)] w-full flex-col justify-center"
-      >
-        <Card className="w-full max-w-[480px] self-center">
-          <CardHeader className="flex flex-col items-center justify-center">
-            <h1 className="text-3xl font-bold text-primary">Buat Akun</h1>
-            <p className="text-muted-foreground">Qepoin dong</p>
-          </CardHeader>
-          <CardContent>
-            <Form {...form}>
-              <RegisterFormInner
-                isLoading={registerUserIsPending}
-                onRegisterSubmit={handleRegisterSubmit}
-                showPassword={true}
-              />
-            </Form>
+    <GuestRoute>
+      <PageContainer>
+        <SectionContainer
+          padded
+          className="flex min-h-[calc(100vh-144px)] w-full flex-col justify-center"
+        >
+          <Card className="w-full max-w-[480px] self-center">
+            <CardHeader className="flex flex-col items-center justify-center">
+              <h1 className="text-3xl font-bold text-primary">Buat Akun</h1>
+              <p className="text-muted-foreground">Qepoin dong</p>
+            </CardHeader>
+            <CardContent>
+              <Form {...form}>
+                <RegisterFormInner
+                  isLoading={registerUserIsPending}
+                  onRegisterSubmit={handleRegisterSubmit}
+                  showPassword={true}
+                />
+              </Form>
 
-            {/* CONTINUE WITH GOOGLE */}
-          </CardContent>
+              {/* CONTINUE WITH GOOGLE */}
+            </CardContent>
 
-          <CardFooter className="flex flex-col gap-4">
-            <div className="flex w-full items-center justify-between gap-x-4">
-              <div className="h-[2px] w-full border-t-2" />
-              <p className="flex text-nowrap text-center text-muted-foreground">
-                Atau lanjutkan dengan
+            <CardFooter className="flex flex-col gap-4">
+              <div className="flex w-full items-center justify-between gap-x-4">
+                <div className="h-[2px] w-full border-t-2" />
+                <p className="flex text-nowrap text-center text-muted-foreground">
+                  Atau lanjutkan dengan
+                </p>
+                <div className="h-[2px] w-full border-t-2" />
+              </div>
+
+              <Button variant="secondary" className="w-full" size="lg">
+                <FcGoogle />
+                Buat Akun dengan Google
+              </Button>
+
+              <p>
+                Sudah punya akun?{" "}
+                <Link href="/login" className="font-bold text-purple-600">
+                  Login
+                </Link>
               </p>
-              <div className="h-[2px] w-full border-t-2" />
-            </div>
-
-            <Button variant="secondary" className="w-full" size="lg">
-              <FcGoogle />
-              Buat Akun dengan Google
-            </Button>
-
-            <p>
-              Sudah punya akun?{" "}
-              <Link href="/login" className="font-bold text-purple-600">
-                Login
-              </Link>
-            </p>
-          </CardFooter>
-        </Card>
-      </SectionContainer>
-    </PageContainer>
+            </CardFooter>
+          </Card>
+        </SectionContainer>
+      </PageContainer>
+    </GuestRoute>
   );
 };
 
