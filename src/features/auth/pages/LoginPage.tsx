@@ -68,9 +68,9 @@ const LoginPage = () => {
           <Card className="w-full max-w-[480px] self-center">
             <CardHeader className="flex flex-col items-center justify-center">
               <h1 className="text-3xl font-bold text-primary">
-                Selamat Datang Kembali
+                Selamat Datang Kembali 🙉
               </h1>
-              <p className="text-muted-foreground">Masuk kalo Qepo 🙉</p>
+              <p className="text-muted-foreground">Masuk kalo Qepo</p>
               <Button variant="secondary" className="w-full" size="lg">
                 <FcGoogle />
                 Masuk dengan Google
