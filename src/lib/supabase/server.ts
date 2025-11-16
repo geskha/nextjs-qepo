@@ -10,7 +10,7 @@ export function createSSRClient(ctx: {
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_ANON_KEY!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
         getAll() {
@@ -30,6 +30,8 @@ export function createSSRClient(ctx: {
       },
     },
   );
+
+  return supabase;
 }
 
 export const supabaseAdminClient = createDefaultClient(

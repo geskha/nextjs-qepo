@@ -21,7 +21,9 @@ model Post {
 }
 
 model Profile {
-    userId   String @id
-    email    String @unique
-    username String @unique
+    userId            String  @id
+    email             String  @unique
+    username          String  @unique
+    bio               String?
+    profilePictureUrl String?
 }
