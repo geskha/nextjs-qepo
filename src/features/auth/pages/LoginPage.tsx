@@ -18,7 +18,7 @@ import { api } from "~/utils/api";
 import RegisterFormInner from "../components/RegisterFormInner";
 import { registerFormShcema, type RegisterFormSchema } from "../forms/register";
 
-const RegisterPage = () => {
+const LoginPage = () => {
   const form = useForm<RegisterFormSchema>({
     resolver: zodResolver(registerFormShcema),
   });
@@ -47,39 +47,31 @@ const RegisterPage = () => {
       >
         <Card className="w-full max-w-[480px] self-center">
           <CardHeader className="flex flex-col items-center justify-center">
-            <h1 className="text-3xl font-bold text-primary">Buat Akun</h1>
-            <p className="text-muted-foreground">Qepoin dong</p>
+            <h1 className="text-3xl font-bold text-primary">
+              Selamat Datang Kembali
+            </h1>
+            <p className="text-muted-foreground">Masuk kalo Qepo 🙉</p>
+            <Button variant="secondary" className="w-full" size="lg">
+              <FcGoogle />
+              Masuk dengan Google
+            </Button>
           </CardHeader>
           <CardContent>
             <Form {...form}>
               <RegisterFormInner
                 isLoading={registerUserIsPending}
                 onRegisterSubmit={handleRegisterSubmit}
-                showPassword={true}
+                buttonText="Masuk"
+                showPassword={false}
               />
             </Form>
-
-            {/* CONTINUE WITH GOOGLE */}
           </CardContent>
 
           <CardFooter className="flex flex-col gap-4">
-            <div className="flex w-full items-center justify-between gap-x-4">
-              <div className="h-[2px] w-full border-t-2" />
-              <p className="flex text-nowrap text-center text-muted-foreground">
-                Atau lanjutkan dengan
-              </p>
-              <div className="h-[2px] w-full border-t-2" />
-            </div>
-
-            <Button variant="secondary" className="w-full" size="lg">
-              <FcGoogle />
-              Buat Akun dengan Google
-            </Button>
-
             <p>
-              Sudah punya akun?{" "}
-              <Link href="/login" className="font-bold text-purple-600">
-                Login
+              Belum punya akun?{" "}
+              <Link href="/register" className="font-bold text-purple-600">
+                Daftar dong
               </Link>
             </p>
           </CardFooter>
@@ -89,4 +81,4 @@ const RegisterPage = () => {
   );
 };
 
-export default RegisterPage;
+export default LoginPage;

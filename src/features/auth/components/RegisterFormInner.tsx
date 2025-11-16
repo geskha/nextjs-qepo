@@ -17,6 +17,8 @@ import { RegisterFormSchema } from "../forms/register";
 type RegisterFormInnerProps = {
   onRegisterSubmit: (values: RegisterFormSchema) => void;
   isLoading?: boolean;
+  buttonText?: string;
+  showPassword?: boolean;
 };
 
 export const RegisterFormInner = (props: RegisterFormInnerProps) => {
@@ -36,7 +38,7 @@ export const RegisterFormInner = (props: RegisterFormInnerProps) => {
           <FormItem>
             <FormLabel>Email</FormLabel>
             <FormControl>
-              <Input {...field} type="email" />
+              <Input {...field} type="email" placeholder="Masukan email" />
             </FormControl>
             <FormDescription />
             <FormMessage />
@@ -51,7 +53,11 @@ export const RegisterFormInner = (props: RegisterFormInnerProps) => {
           <FormItem>
             <FormLabel>Password</FormLabel>
             <FormControl>
-              <Input {...field} type={showPassword ? "text" : "password"} />
+              <Input
+                {...field}
+                type={showPassword ? "text" : "password"}
+                placeholder="Masukan password"
+              />
             </FormControl>
             <FormDescription />
             <FormMessage />
@@ -59,16 +65,18 @@ export const RegisterFormInner = (props: RegisterFormInnerProps) => {
         )}
       />
 
-      <Label className="flex items-center gap-2">
-        <Checkbox
-          checked={showPassword}
-          onCheckedChange={(checked) => setShowPassword(!!checked)}
-        />
-        Show Password
-      </Label>
+      {props.showPassword && (
+        <Label className="flex items-center gap-2">
+          <Checkbox
+            checked={showPassword}
+            onCheckedChange={(checked) => setShowPassword(!!checked)}
+          />
+          Show Password
+        </Label>
+      )}
 
       <Button disabled={props.isLoading} className="mt-4 w-full" size="lg">
-        Buat akun
+        {props.buttonText ?? "Buat akun"}
       </Button>
     </form>
   );
