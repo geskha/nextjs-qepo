@@ -15,7 +15,13 @@ import {
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import { Textarea } from "../../../components/ui/textarea";
-import { useEffect, useRef } from "react";
+import {
+  type ChangeEventHandler,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Camera } from "lucide-react";
 import { api } from "../../../utils/api";
 import {
@@ -30,16 +36,24 @@ import { toast } from "sonner";
 import { error } from "console";
 import { TRPCError } from "@trpc/server";
 import { TRPCClientError } from "@trpc/client";
+import { objectUtil } from "zod";
 
 export const ProfilePage = () => {
+  const [selectedImage, setSelectedImage] = useState<File | undefined | null>(
+    null,
+  );
+
+  const apiUtils = api.useUtils();
+
   const form = useForm<EditProfileFormSchema>({
     resolver: zodResolver(editProfileFormSchema),
   });
+
   const { data: getProfileData } = api.profile.getProfile.useQuery();
 
   const updateProfile = api.profile.upadteProfil.useMutation({
     onSuccess: ({ bio, username }) => {
-      form.reset({ bio: bio ?? "", username });
+      form.reset({ bio: bio ?? "", username }, { keepDirtyValues: false });
       toast.success("Berhasil update profile");
     },
     onError: (err) => {
@@ -48,6 +62,16 @@ export const ProfilePage = () => {
           form.setError("username", { message: "Username sudah digunakan" });
         }
       }
+    },
+  });
+  const updateProfilePicture = api.profile.updateProfilePicture.useMutation({
+    onSuccess: async () => {
+      toast.success("Profile berhasil diubah");
+      setSelectedImage(undefined);
+      await apiUtils.profile.getProfile.invalidate();
+    },
+    onError: async () => {
+      toast.error("Gagal merubah profile");
     },
   });
 
@@ -74,9 +98,36 @@ export const ProfilePage = () => {
     inputFileRef.current?.click();
   };
 
-  // const editProfileFormHasChanges =
-  //   getProfileData?.username !== form.watch("username") ||
-  //   getProfileData.bio !== form.watch("bio");
+  const handleRemovePreviewImage = () => {
+    setSelectedImage(null);
+  };
+
+  const onPickProfilePicture: ChangeEventHandler<HTMLInputElement> = (e) => {
+    if (e.target.files) {
+      setSelectedImage(e.target.files[0] ?? undefined);
+    }
+  };
+
+  const handleUpdateProfilePicture = async () => {
+    if (selectedImage) {
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        const result = reader.result as string;
+        const imageBase64 = result.substring(result.indexOf(",") + 1);
+
+        updateProfilePicture.mutate(imageBase64);
+      };
+
+      reader.readAsDataURL(selectedImage);
+    }
+  };
+
+  const selectedImageProvilePreview: string | undefined = useMemo(() => {
+    if (selectedImage) {
+      return URL.createObjectURL(selectedImage);
+    }
+  }, [selectedImage]);
 
   useEffect(() => {
     if (getProfileData) {
@@ -95,7 +146,13 @@ export const ProfilePage = () => {
               <div className="flex flex-col gap-2">
                 <Avatar className="size-24">
                   <AvatarFallback>VF</AvatarFallback>
-                  <AvatarImage />
+                  <AvatarImage
+                    src={
+                      selectedImageProvilePreview ??
+                      getProfileData?.profilePictureUrl ??
+                      undefined
+                    }
+                  />
                 </Avatar>
                 <div className="relative">
                   <Button
@@ -105,7 +162,30 @@ export const ProfilePage = () => {
                     <Camera />
                   </Button>
                 </div>
-                <input type="file" ref={inputFileRef} className="hidden" />
+
+                {!!selectedImageProvilePreview && (
+                  <>
+                    <Button
+                      onClick={handleRemovePreviewImage}
+                      size="sm"
+                      variant="destructive"
+                      className="mt-5"
+                    >
+                      Hapus
+                    </Button>
+                    <Button size="sm" onClick={handleUpdateProfilePicture}>
+                      Simpan
+                    </Button>
+                  </>
+                )}
+
+                <input
+                  accept="image/*"
+                  onChange={onPickProfilePicture}
+                  type="file"
+                  ref={inputFileRef}
+                  className="hidden"
+                />
               </div>
 
               <div className="grid flex-1 grid-cols-2 gap-y-4">
