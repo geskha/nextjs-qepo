@@ -20,15 +20,10 @@ type EditProfileFormInnerProps = {
 };
 
 export const EditProfileFormInner = (props: EditProfileFormInnerProps) => {
-  const form = useForm<EditProfileFormSchema>({
-    defaultValues: {
-      username: props.defaultValues.username ?? "",
-      bio: props.defaultValues.bio ?? "",
-    },
-  });
+  const form = useFormContext<EditProfileFormSchema>();
 
   return (
-    <Form {...form}>
+    <>
       <FormField
         control={form.control}
         name="username"
@@ -58,7 +53,7 @@ export const EditProfileFormInner = (props: EditProfileFormInnerProps) => {
           </FormItem>
         )}
       />
-    </Form>
+    </>
   );
 };
 

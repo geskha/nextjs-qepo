@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const editProfileFormSchema = z.object({
+export const editProfileFormSchema = z.object({
   username: z
     .string()
     .min(5, { message: "Minimal 5 karakter" })
