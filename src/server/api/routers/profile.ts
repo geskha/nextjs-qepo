@@ -74,7 +74,7 @@ export const profileRouter = createTRPCRouter({
       const fileName = `avatar-${user?.id}.jpeg`;
 
       if (input) {
-        const buffer = new Buffer.from(input, "base64");
+        const buffer = Buffer.from(input, "base64");
 
         const { data, error } = await supabaseAdminClient.storage
           .from(SUPABASE_BUCKET.ProfilePictures)
